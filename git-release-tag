@@ -1,0 +1,9 @@
+#!/bin/sh
+changelog=$(git ls-files doc/changelog doc/NEWS | head -n1)
+read project version release junk <<EOF
+$(git cat-file blob "HEAD:$changelog" | head -n1)
+EOF
+version="${version%)}"
+version="${version#(}"
+release="${release%;}"
+git tag "$version" -asm "$project $version"
