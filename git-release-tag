@@ -1,5 +1,5 @@
 #!/bin/sh
-changelog=$(git ls-files doc/changelog doc/NEWS | head -n1)
+changelog=$(git ls-files doc/changelog doc/NEWS | tail -n1)
 read project version release junk <<EOF
 $(git cat-file blob "HEAD:$changelog" | head -n1)
 EOF
