@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e -u
+url="$1"
+name=$(basename "${url%.git}")
+git clone --bare "$url" "$name"
+git -C "$name" bundle create "../${name}.gb" --all
+rm -rf "$name"
