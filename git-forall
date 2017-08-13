@@ -15,7 +15,7 @@ do
     dir="${dir%/.git}"
     dir="${dir#./}"
     printf '[\033[1m%s\033[0m]\n' "$dir"
-    git -C "$dir" "$@"
+    git -C "$dir" "$@" < /dev/null
     printf '\n'
 done
 
