@@ -1,0 +1,21 @@
+git-clone-to-bundle
+===================
+
+.. code:: console
+
+   $ git-clone-to-bundle https://github.com/jwilk/git-toolbox
+   Cloning into bare repository '/tmp/git-clone-to-bundle.I3gaeO/repo'...
+   remote: Counting objects: 15, done.
+   remote: Compressing objects: 100% (12/12), done.
+   remote: Total 15 (delta 2), reused 15 (delta 2), pack-reused 0
+   Unpacking objects: 100% (15/15), done.
+   Counting objects: 15, done.
+   Delta compression using up to 2 threads.
+   Compressing objects: 100% (14/14), done.
+   Writing objects: 100% (15/15), 2.32 KiB | 1.16 MiB/s, done.
+   Total 15 (delta 2), reused 0 (delta 0)
+
+   $ file git-toolbox.gb
+   git-toolbox.gb: Git bundle
+
+.. vim:ft=rst ts=3 sts=3 sw=3 et
