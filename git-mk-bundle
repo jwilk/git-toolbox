@@ -6,6 +6,7 @@
 set -e -u
 url="$1"
 name=$(basename "${url%.git}")
-git clone --bare "$url" "$name"
-git -C "$name" bundle create "../${name}.gb" --all
-rm -rf "$name"
+tmpdir=$(mktemp -d -t git-mk-bundle.XXXXXX)
+git clone --bare "$url" "$tmpdir/repo"
+git -C "$tmpdir/repo" bundle create "$PWD/${name}.gb" --all
+rm -rf "$tmpdir"
