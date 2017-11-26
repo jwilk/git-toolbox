@@ -6,7 +6,9 @@ addons:
     packages:
     - python-docutils
     - python-pygments
+    - shellcheck
 script:
+- shellcheck git*
 - ./git-clone-to-bundle https://github.com/jwilk/git-toolbox
 - file git-toolbox.gb
 - private/check-rst
