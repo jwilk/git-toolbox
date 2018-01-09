@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# Copyright © 2016-2017 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
 set -u
 findopts=
 while getopts 'L' opt
