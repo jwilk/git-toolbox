@@ -11,6 +11,7 @@ script:
 - shellcheck git*
 - ./git-clone-to-bundle https://github.com/jwilk/git-toolbox
 - file git-toolbox.gb
+- ./git-forall status
 - private/check-rst
 
 # vim:ts=2 sts=2 sw=2 et
