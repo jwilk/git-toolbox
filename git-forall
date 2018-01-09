@@ -19,6 +19,7 @@ find $findopts . -xdev -type d \( -name '.git' -o -path '*/.hg/git' \) -print -p
 do
     dir="${dir%/.git}"
     dir="${dir#./}"
+    # shellcheck disable=SC2059
     printf "$template"'\n' "$dir"
     git -C "$dir" "$@" < /dev/null
     printf '\n'
