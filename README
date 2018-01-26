@@ -3,6 +3,11 @@ git-clone-to-bundle
 
 .. code:: console
 
+   $ git-clone-to-bundle -h
+   Usage:
+     git-clone-to-bundle URL [URL...]
+     git-clone-to-bundle -o FILE URL
+
    $ git-clone-to-bundle https://github.com/jwilk/git-toolbox
    Cloning into bare repository '/tmp/git-clone-to-bundle.I3gaeO/repo'...
    remote: Counting objects: 15, done.
