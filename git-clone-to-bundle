@@ -5,7 +5,10 @@
 
 set -e -u -C
 url="$1"
-name=$(basename "${url%.git}")
+name="$url"
+name="${name%/}"
+name="${name%.git}"
+name="${name##*/}"
 tmpdir=$(mktemp -d -t git-clone-to-bundle.XXXXXX)
 git clone --bare "$url" "$tmpdir/repo"
 dest="$PWD/${name}.gb"
