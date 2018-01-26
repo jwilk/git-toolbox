@@ -9,9 +9,9 @@ name="$url"
 name="${name%/}"
 name="${name%.git}"
 name="${name##*/}"
-tmpdir=$(mktemp -d -t git-clone-to-bundle.XXXXXX)
-git clone --bare "$url" "$tmpdir/repo"
 dest="$PWD/${name}.gb"
 true > "$dest"
+tmpdir=$(mktemp -d -t git-clone-to-bundle.XXXXXX)
+git clone --bare "$url" "$tmpdir/repo"
 git -C "$tmpdir/repo" bundle create "$dest" --all
 rm -rf "$tmpdir"
