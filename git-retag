@@ -8,6 +8,7 @@ usage()
     printf 'Usage: %s [-p PROJECT]\n' "$prog"
 }
 
+set -e -u
 prog="${0##*/}"
 project=
 while getopts 'hp:' opt
