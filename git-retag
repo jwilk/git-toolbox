@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Copyright © 2016-2018 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
 project=$1
 [ -n "$project" ] || project=$(basename "$PWD")
 retag()
