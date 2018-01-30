@@ -3,6 +3,7 @@
 # Copyright © 2016-2018 Jakub Wilk <jwilk@jwilk.net>
 # SPDX-License-Identifier: MIT
 
+set -e -u
 changelog=$(git ls-files doc/changelog doc/NEWS | LC_ALL=C sort | tail -n1)
 read project version release junk <<EOF
 $(git cat-file blob "HEAD:$changelog" | head -n1)
@@ -10,4 +11,4 @@ EOF
 version="${version%)}"
 version="${version#(}"
 release="${release%;}"
-git tag "$version" -asm "$project $version"
+exec git tag "$version" -asm "$project $version"
