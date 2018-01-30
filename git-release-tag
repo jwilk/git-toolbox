@@ -5,6 +5,11 @@
 
 set -e -u
 changelog=$(git ls-files doc/changelog doc/NEWS | LC_ALL=C sort | tail -n1)
+if [ -z "$changelog" ]
+then
+    printf '%s: no changelog found\n' "${0##*/}" >&2
+    exit 1
+fi
 read -r project version release <<EOF
 $(git cat-file blob "HEAD:$changelog" | head -n1)
 EOF
