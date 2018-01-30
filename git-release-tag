@@ -5,7 +5,7 @@
 
 set -e -u
 changelog=$(git ls-files doc/changelog doc/NEWS | LC_ALL=C sort | tail -n1)
-read project version release junk <<EOF
+read project version release <<EOF
 $(git cat-file blob "HEAD:$changelog" | head -n1)
 EOF
 version="${version%)}"
