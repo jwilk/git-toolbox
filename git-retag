@@ -3,7 +3,22 @@
 # Copyright © 2016-2018 Jakub Wilk <jwilk@jwilk.net>
 # SPDX-License-Identifier: MIT
 
-project=$1
+usage()
+{
+    printf 'Usage: %s [-p PROJECT]\n' "$prog"
+}
+
+prog="${0##*/}"
+project=
+while getopts 'hp:' opt
+do
+    case "$opt" in
+        h) usage; exit 0;;
+        p) project="$OPTARG";;
+        *) exit 1;;
+    esac
+done
+shift $((OPTIND - 1))
 [ -n "$project" ] || project=$(basename "$PWD")
 retag()
 {
