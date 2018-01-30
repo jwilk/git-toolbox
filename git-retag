@@ -5,27 +5,40 @@
 
 usage()
 {
-    printf 'Usage: %s [-p PROJECT]\n' "$prog"
+    printf 'Usage:\n  %s [-p PROJECT] TAG [TAG...]\n  %s [-p PROJECT] -a\n' "$prog" "$prog"
 }
 
 set -e -u
 prog="${0##*/}"
 project=${PWD##*/}
-while getopts 'hp:' opt
+opt_all=
+while getopts 'hp:a' opt
 do
     case "$opt" in
         h) usage; exit 0;;
         p) project="$OPTARG";;
+        a) opt_all=1;;
         *) exit 1;;
     esac
 done
 shift $((OPTIND - 1))
+if [ $# -eq 0 ]
+then
+    if [ "$opt_all" ]
+    then
+        s=$(git for-each-ref --shell --format='set -- "$@" %(refname:lstrip=2)' refs/tags/);
+        eval "set -e; $s"
+    else
+        usage >&2
+        exit 1
+    fi
+fi
 retag()
 {
     export GIT_COMMITTER_DATE="$(git log -1 --format=%ci "$1")"
     git tag -m "$project $1" -f -s -a "$1" "$1^{}";
 }
-for t in $(git tag)
+for t
 do
     retag $t
 done
