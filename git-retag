@@ -10,7 +10,7 @@ usage()
 
 set -e -u
 prog="${0##*/}"
-project=
+project=${PWD##*/}
 while getopts 'hp:' opt
 do
     case "$opt" in
@@ -20,7 +20,6 @@ do
     esac
 done
 shift $((OPTIND - 1))
-[ -n "$project" ] || project=$(basename "$PWD")
 retag()
 {
     export GIT_COMMITTER_DATE="$(git log -1 --format=%ci "$1")"
