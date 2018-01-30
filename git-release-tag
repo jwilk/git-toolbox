@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# Copyright © 2016-2018 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
 changelog=$(git ls-files doc/changelog doc/NEWS | LC_ALL=C sort | tail -n1)
 read project version release junk <<EOF
 $(git cat-file blob "HEAD:$changelog" | head -n1)
