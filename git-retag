@@ -32,6 +32,10 @@ then
         usage >&2
         exit 1
     fi
+elif [ "$opt_all" ]
+then
+    usage >&2
+    exit 1
 fi
 retag()
 {
