@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Copyright © 2018 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
+boring="\
+On branch master
+Your branch is up to date with 'origin/master'.
+
+nothing to commit, working tree clean"
+out="$(git status "$@")"
+rc=$?
+[ "$out" = "$boring" ] || printf '%s\n' "$out"
+exit $rc
+
+# vim:ts=4 sts=4 sw=4 et
