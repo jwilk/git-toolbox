@@ -5,16 +5,19 @@
 
 set -u
 findopts=
-while getopts 'L' opt
+filter='cat'
+while getopts 'LF:' opt
 do
     case "$opt" in
         L) findopts='-L';;
+        F) filter="$OPTARG";;
         *) exit 1;;
     esac
 done
 shift $((OPTIND - 1))
 template=$(git -C / config --get forall.template) || template='==> %s <=='
 find $findopts . -xdev -type d \( -name '.git' \) -print -prune \
+| $filter \
 | while read -r dir
 do
     dir="${dir%/.git}"
