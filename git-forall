@@ -17,7 +17,7 @@ done
 shift $((OPTIND - 1))
 template=$(git -C / config --get forall.template) || template='==> %s <=='
 find $findopts . -xdev -type d \( -name '.git' \) -print -prune \
-| $filter \
+| sh -c "$filter" \
 | while read -r dir
 do
     dir="${dir%/.git}"
