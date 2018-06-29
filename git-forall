@@ -5,18 +5,20 @@
 
 set -u
 findopts=
+findexpr=
 filter='cat'
-while getopts 'LF:' opt
+while getopts 'Ld:F:' opt
 do
     case "$opt" in
         L) findopts='-L';;
+        d) findexpr="-maxdepth $((1 + OPTARG))";;
         F) filter="$OPTARG";;
         *) exit 1;;
     esac
 done
 shift $((OPTIND - 1))
 template=$(git -C / config --get forall.template) || template='==> %s <=='
-find $findopts . -xdev -type d \( -name '.git' \) -print -prune \
+find $findopts . $findexpr -xdev -type d \( -name '.git' \) -print -prune \
 | sh -c "$filter" \
 | while read -r dir
 do
