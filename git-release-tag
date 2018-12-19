@@ -10,7 +10,7 @@ then
     printf '%s: no changelog found\n' "${0##*/}" >&2
     exit 1
 fi
-IFS='(); ' read -r project version release urgency <<EOF
+IFS='(); ' read -r project version release _ <<EOF
 $(git cat-file blob "HEAD:$changelog" | head -n1)
 EOF
 if [ "$release" = UNRELEASED ]
