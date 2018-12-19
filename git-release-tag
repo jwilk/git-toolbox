@@ -10,12 +10,9 @@ then
     printf '%s: no changelog found\n' "${0##*/}" >&2
     exit 1
 fi
-read -r project version release <<EOF
+IFS='(); ' read project version release urgency <<EOF
 $(git cat-file blob "HEAD:$changelog" | head -n1)
 EOF
-version="${version%')'}"
-version="${version#'('}"
-release="${release%';'}"
 exec git tag "$version" -asm "$project $version"
 
 # vim:ts=4 sts=4 sw=4 et
