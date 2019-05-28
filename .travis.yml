@@ -7,8 +7,6 @@ install:
 script:
 - shellcheck git*
 - prove -v
-- ./git-clone-to-bundle https://github.com/jwilk/git-toolbox
-- file git-toolbox.gb
 - ./git-forall status
 - restructuredtext-lint --encoding=UTF-8 README
 
