@@ -7,7 +7,6 @@ install:
 script:
 - shellcheck git*
 - prove -v
-- ./git-forall status
 - restructuredtext-lint --encoding=UTF-8 README
 
 # vim:ts=2 sts=2 sw=2 et
