@@ -1,9 +1,12 @@
 dist: xenial
 language: generic
+git:
+  depth: false
 install:
 - python -m pip install --user pygments restructuredtext-lint
 script:
 - shellcheck git*
+- prove -v
 - ./git-clone-to-bundle https://github.com/jwilk/git-toolbox
 - file git-toolbox.gb
 - ./git-forall status
