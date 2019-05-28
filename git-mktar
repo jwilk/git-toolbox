@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Copyright © 2017-2019 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
+usage()
+{
+    printf 'Usage:\n  %s URL [URL...]\n  %s -o FILE URL\n' "$prog" "$prog"
+}
+
+set -e -u -C
+prog="${0##*/}"
+xdest=
+while getopts 'ho:' opt
+do
+    case "$opt" in
+        h) usage; exit 0;;
+        o) xdest="$OPTARG";;
+        *) exit 1;;
+    esac
+done
+shift $((OPTIND - 1))
+if [ $# -eq 0 ]
+then
+    usage >&2
+    exit 1
+fi
+if [ -n "$xdest" ] && [ "${xdest#/}" = "$xdest" ]
+then
+    xdest="$PWD/$xdest"
+fi
+tar_options='--owner=root --group=root --mode=a+rX --sort=name'
+for url in "$@"
+do
+    name="$url"
+    name="${name%/}"
+    name="${name%.git}"
+    name="${name##*/}"
+    if [ -n "$xdest" ]
+    then
+        dest="$xdest"
+    else
+        dest="$PWD/${name}.git.tar"
+    fi
+    true > "$dest"
+    tmpdir=$(mktemp -d -t git-mktar.XXXXXX)
+    git clone "$url" "$tmpdir/repo"
+    # shellcheck disable=SC2086
+    tar $tar_options -cf "$dest" -C "$tmpdir/repo" --transform="s/^/$name/"  --exclude=.git/hooks .git
+    rm -rf "$tmpdir"
+done
+
+# vim:ts=4 sts=4 sw=4 et
