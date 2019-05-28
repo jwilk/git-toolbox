@@ -5,7 +5,7 @@ git:
 install:
 - python -m pip install --user pygments restructuredtext-lint
 script:
-- shellcheck git*
+- shellcheck git* t/*.t
 - prove -v
 - restructuredtext-lint --encoding=UTF-8 README
 
