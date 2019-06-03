@@ -75,6 +75,7 @@ do
         exit 1
     fi
     mv "$dest/.git.tmp" "$dest/.git"
+    printf '%s: ' "$dest"
     git -C "$dest/" reset --hard
 done
 
