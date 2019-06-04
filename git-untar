@@ -61,7 +61,6 @@ do
     tar -xf "$tarfile" --strip=1 -C "$dest/.git.tmp" --wildcards \
         '*/HEAD' \
         '*/branches/' \
-        '*/index' \
         '*/logs/' \
         '*/objects/' \
         '*/packed-refs' \
