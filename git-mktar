@@ -44,7 +44,7 @@ do
     fi
     true > "$dest"
     tmpdir=$(mktemp -d -t git-mktar.XXXXXX)
-    git clone "$url" "$tmpdir/repo"
+    git clone --no-checkout "$url" "$tmpdir/repo"
     # shellcheck disable=SC2086
     tar $tar_options -cf "$dest" -C "$tmpdir/repo" --transform="s/^/$name/"  --exclude=.git/hooks .git
     rm -rf "$tmpdir"
