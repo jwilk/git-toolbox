@@ -38,7 +38,7 @@ config_regexps=$(tr '\n' '|' <<'EOF'
 \[remote "origin"\]
 \turl = (https?|git|file)://([][:/?#@!$&()*+,;a-zA-Z0-9._/~-]|%[0-9a-fA-F]{2})+
 \tfetch = [+]refs/heads/[*]:refs/remotes/origin/[*]
-\[branch ".+"\]
+\[branch "[a-zA-Z0-9._-]+"\]
 \tremote = origin
 \tmerge = refs/heads/\S+
 EOF
