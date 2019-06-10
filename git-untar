@@ -35,7 +35,7 @@ config_regexps=$(tr '\n' '|' <<'EOF'
 \tfilemode = true
 \tbare = false
 \tlogallrefupdates = true
-\[remote ".+"\]
+\[remote "origin"\]
 \turl = (https?|git|file)://([][:/?#@!$&()*+,;a-zA-Z0-9._/~-]|%[0-9a-fA-F]{2})+
 \tfetch = [+]refs/heads/[*]:refs/remotes/origin/[*]
 \[branch ".+"\]
