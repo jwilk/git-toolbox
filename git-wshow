@@ -43,7 +43,7 @@ case $remote_url in
         url="https://git.savannah.nongnu.org/cgit/${repo%.git}.git/commit/?id=$commit";;
     git://git.code.sf.net/p/*|https://git.code.sf.net/p/*)
         repo=${remote_url#*://git.code.sf.net/p/}
-        url="https://sourceforge.net/p/${repo%.git}/ci/$commit/"
+        url="https://sourceforge.net/p/${repo%.git}/ci/$commit/";;
 esac
 if [ -z "$url" ]
 then
