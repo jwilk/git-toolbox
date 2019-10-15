@@ -50,7 +50,6 @@ do
     for ext in tar tar.gz tar.bz2 tar.xz tar.zst
     do
         sname="${name%.$ext}"
-        echo "$name $sname"
         if [ "$sname" != "$name" ]
         then
             name="$sname"
