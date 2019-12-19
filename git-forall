@@ -3,13 +3,20 @@
 # Copyright © 2016-2018 Jakub Wilk <jwilk@jwilk.net>
 # SPDX-License-Identifier: MIT
 
+usage()
+{
+    printf 'Usage: %s [-L] [-d N] [-F FILTERCMDLINE] GITCMD [ARGS...]\n' "$prog"
+}
+
 set -u
+prog="${0##*/}"
 findopts=
 findexpr=
 filter='cat'
-while getopts 'Ld:F:' opt
+while getopts 'hLd:F:' opt
 do
     case "$opt" in
+        h) usage; exit 0;;
         L) findopts='-L';;
         d) findexpr="-maxdepth $((1 + OPTARG))";;
         F) filter="$OPTARG";;
@@ -17,6 +24,11 @@ do
     esac
 done
 shift $((OPTIND - 1))
+if [ $# -eq 0 ]
+then
+    usage >&2
+    exit 1
+fi
 template=$(git -C / config --get forall.template) || template='==> %s <=='
 # shellcheck disable=SC2086
 find $findopts . $findexpr -xdev -type d \( -name '.git' \) -print -prune \
