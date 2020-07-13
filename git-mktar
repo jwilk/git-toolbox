@@ -29,7 +29,7 @@ if [ -n "$xdest" ] && [ "${xdest#/}" = "$xdest" ]
 then
     xdest="$PWD/$xdest"
 fi
-tar_options='--owner=root --group=root --mode=a+rX --sort=name'
+tar_options='--owner=root --group=root --mode=u=rwX,go=rX --sort=name'
 for url in "$@"
 do
     name="$url"
