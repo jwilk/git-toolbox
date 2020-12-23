@@ -5,21 +5,23 @@
 
 usage()
 {
-    printf 'Usage: %s [-L] [-d N] [-F FILTERCMDLINE] GITCMD [ARGS...]\n' "$prog"
+    printf 'Usage: %s [-L] [-d N] [-F FILTERCMDLINE] [-b] GITCMD [ARGS...]\n' "$prog"
 }
 
 set -u
 prog="${0##*/}"
 findopts=
 findexpr=
+ignore_boring=
 filter='cat'
-while getopts 'hLd:F:' opt
+while getopts 'hLd:F:b' opt
 do
     case "$opt" in
         h) usage; exit 0;;
         L) findopts='-L';;
         d) findexpr="-maxdepth $((1 + OPTARG))";;
         F) filter="$OPTARG";;
+        b) ignore_boring=y;;
         *) exit 1;;
     esac
 done
@@ -37,10 +39,20 @@ find $findopts . $findexpr -xdev -type d \( -name '.git' \) -print -prune \
 do
     dir="${dir%/.git}"
     dir="${dir#./}"
-    # shellcheck disable=SC2059
-    printf "$template"'\n' "$dir"
-    git -C "$dir" "$@" < /dev/null
-    printf '\n'
+    if [ "$ignore_boring" ]
+    then
+        out=$(git -C "$dir" "$@" < /dev/null)
+        if [ "$out" ]
+        then
+            # shellcheck disable=SC2059
+            printf "$template"'\n%s\n\n' "$dir" "$out"
+        fi
+    else
+        # shellcheck disable=SC2059
+        printf "$template"'\n' "$dir"
+        git -C "$dir" "$@" < /dev/null
+        printf '\n'
+    fi
 done
 
 # vim:ts=4 sts=4 sw=4 et
