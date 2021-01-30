@@ -45,6 +45,7 @@ EOF
 )
 for tarfile in "$@"
 do
+    stat "$tarfile" > /dev/null
     name="$tarfile"
     name="${name%/}"
     for ext in tar tar.gz tar.bz2 tar.xz tar.zst
