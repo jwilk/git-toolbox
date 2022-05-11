@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Copyright © 2022 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
+set -e -u
+date='1970-01-01T00:00:00 +0000'
+name='nobody'
+mail='nobody@example.org'
+export GIT_AUTHOR_NAME="$name"
+export GIT_AUTHOR_EMAIL="$mail"
+export GIT_AUTHOR_DATE="$date"
+export GIT_COMMITTER_NAME="$name"
+export GIT_COMMITTER_EMAIL="$mail"
+export GIT_COMMITTER_DATE="$date"
+obj=$(git commit-tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904 < /dev/null)
+info=$(git for-each-ref refs/heads/null)
+if [ -z "$info" ]
+then
+    git checkout -b null "$obj"
+elif [ "$info" = "$obj commit	refs/heads/null" ]
+then
+    git checkout null
+else
+    echo 'git-checkout-null: unexpected refs/heads/null' >&2
+    exit 1
+fi
+
+# vim:ts=4 sts=4 sw=4 et
