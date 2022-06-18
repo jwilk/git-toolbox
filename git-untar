@@ -6,6 +6,15 @@
 usage()
 {
     printf 'Usage:\n  %s [-u] TARFILE [TARFILE...]\n  %s [-u] -o DIR TARFILE\n' "$prog" "$prog"
+    if [ "${1-}" = long ]
+    then
+        printf '%s' '
+Options:
+  -u      remove source file after unpacking
+  -o DIR  unpack to DIR
+  -h      show this help message and exit
+'
+    fi
 }
 
 set -e -u -C
@@ -15,7 +24,7 @@ unlink=
 while getopts 'huo:' opt
 do
     case "$opt" in
-        h) usage; exit 0;;
+        h) usage long; exit 0;;
         u) unlink=y;;
         o) xdest="$OPTARG";;
         *) exit 1;;
