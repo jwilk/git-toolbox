@@ -6,6 +6,14 @@
 usage()
 {
     printf 'Usage:\n  %s URL [URL...]\n  %s -o FILE URL\n' "$prog" "$prog"
+    if [ "${1-}" = long ]
+    then
+        printf '%s' '
+Options:
+  -o FILE  write to FILE
+  -h       show this help message and exit
+'
+    fi
 }
 
 set -e -u -C
@@ -14,7 +22,7 @@ xdest=
 while getopts 'ho:' opt
 do
     case "$opt" in
-        h) usage; exit 0;;
+        h) usage long; exit 0;;
         o) xdest="$OPTARG";;
         *) exit 1;;
     esac
