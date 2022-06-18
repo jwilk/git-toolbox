@@ -61,7 +61,7 @@ do
     name="${name%/}"
     for ext in tar tar.gz tar.bz2 tar.xz tar.zst
     do
-        sname="${name%.$ext}"
+        sname=${name%."$ext"}
         if [ "$sname" != "$name" ]
         then
             name="$sname"
