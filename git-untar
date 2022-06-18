@@ -5,16 +5,18 @@
 
 usage()
 {
-    printf 'Usage:\n  %s TARFILE [TARFILE...]\n  %s -o DIR TARFILE\n' "$prog" "$prog"
+    printf 'Usage:\n  %s [-u] TARFILE [TARFILE...]\n  %s [-u] -o DIR TARFILE\n' "$prog" "$prog"
 }
 
 set -e -u -C
 prog="${0##*/}"
 xdest=
-while getopts 'ho:' opt
+unlink=
+while getopts 'huo:' opt
 do
     case "$opt" in
         h) usage; exit 0;;
+        u) unlink=y;;
         o) xdest="$OPTARG";;
         *) exit 1;;
     esac
@@ -85,6 +87,10 @@ do
     mv "$dest/.git.tmp" "$dest/.git"
     printf '%s:\n' "$dest"
     git -C "$dest/" reset --hard
+    if [ "$unlink" = y ]
+    then
+        rm -- "$tarfile"
+    fi
 done
 
 
