@@ -18,9 +18,11 @@ fi
 host="$1"
 set -x
 tmpdir=$(ssh "$host" -- mktemp -dt git-tmpfetch.XXXXXX)
+# shellcheck disable=SC2029
 ssh "$host" -- git clone --mirror "$url" "$tmpdir"
 git remote add tmp "ssh://$host$tmpdir"
 git fetch tmp
+# shellcheck disable=SC2029
 ssh "$host" -- rm -rf "$tmpdir"
 
 # vim:ts=4 sts=4 sw=4 et
