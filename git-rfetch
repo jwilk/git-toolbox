@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Copyright © 2022 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
+set -e -u
+prog="${0##*/}"
+if [ $# -eq 1 ]
+then
+    url=$(git remote get-url origin)
+elif [ $# -eq 2 ]
+then
+    url="$2"
+else
+    printf 'Usage: %s HOST [URL]\n' "$prog" >&2 
+    exit 1
+fi
+host="$1"
+set -x
+tmpdir=$(ssh "$host" -- mktemp -dt git-tmpfetch.XXXXXX)
+ssh "$host" -- git clone --mirror "$url" "$tmpdir"
+git remote add tmp "ssh://$host$tmpdir"
+git fetch tmp
+ssh "$host" -- rm -rf "$tmpdir"
+
+# vim:ts=4 sts=4 sw=4 et
