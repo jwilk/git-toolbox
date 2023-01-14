@@ -20,6 +20,6 @@ jobs:
         prove -v
     - name: run shellcheck
       run: |
-        shellcheck git* t/*.t
+        shellcheck $(grep -rl '^#!.*sh$' *)
 
 # vim:ts=2 sts=2 sw=2 et
