@@ -1,0 +1,79 @@
+#!/usr/bin/env perl
+
+# Copyright © 2023 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
+=pod
+
+Import hg-git's git-mapfile
+as git notes.
+
+=cut
+
+no lib '.';  # CVE-2016-1238
+
+use v5.10;
+
+use autodie;
+use strict;
+use warnings;
+
+use English qw(-no_match_vars);
+use File::Temp ();
+
+use IPC::System::Simple qw(capturex);
+
+my $prog = $PROGRAM_NAME;
+$prog =~ s{^.*/}{};
+
+my $user_name = capturex(qw(git config --get user.name));
+chomp $user_name;
+my $user_email = capturex(qw(git config --get user.email));
+chomp $user_email;
+my $ref = 'refs/notes/commits';
+if (capturex(qw(git for-each-ref), $ref)) {
+    say {*STDERR} "$prog: $ref already exists"
+        or die $ERRNO;
+    exit 1;
+}
+my @items = ();
+while (<STDIN>) {
+    chomp;
+    if (m/^([0-9a-f]{40}) ([0-9a-f]{40})$/) {
+        push @items, { git => $1, hg => $2 };
+    } else {
+        say {*STDERR} "$prog: cannot parse line: $_"
+            or die $ERRNO;
+        exit 1;
+    };
+}
+my $fh = File::Temp->new(
+    TEMPLATE => 'git-import-hg-map.XXXXXX',
+    TMPDIR => 1,
+    UNLINK => 0,
+);
+unlink $fh;
+say {$fh} <<EOF or die $ERRNO;
+reset $ref
+commit $ref
+committer $user_name <$user_email> now
+data <<eof
+Add hg revisions.
+eof
+EOF
+for my $item (@items) {
+    my $hg = $item->{hg};
+    my $git = $item->{git};
+    print {$fh} <<EOF or die $ERRNO;
+N inline $git
+data <<eof
+hg $hg
+eof
+EOF
+}
+$fh->seek(0, 0);
+$fh->flush;
+open STDIN, '<&', (fileno $fh);
+exec {'git' } 'git', 'fast-import', '--date-format=now';
+
+# vim:ts=4 sts=4 sw=4 et
