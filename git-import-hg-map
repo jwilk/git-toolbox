@@ -74,6 +74,6 @@ EOF
 $fh->seek(0, 0);
 $fh->flush;
 open STDIN, '<&', (fileno $fh);
-exec {'git' } 'git', 'fast-import', '--date-format=now';
+exec { 'git' } 'git', 'fast-import', '--date-format=now';
 
 # vim:ts=4 sts=4 sw=4 et
