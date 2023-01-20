@@ -1,0 +1,73 @@
+#!/usr/bin/env perl
+
+# Copyright © 2023 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
+=pod
+
+Convert directories containing snapshots
+into git branch.
+
+=cut
+
+no lib '.';  # CVE-2016-1238
+
+use v5.10;
+
+use autodie;
+use strict;
+use warnings;
+
+use Cwd ();
+use English qw(-no_match_vars);
+use File::Basename ();
+use File::Temp ();
+use Time::HiRes qw(lstat);
+use Time::Piece qw(localtime);
+
+use File::Find ();
+use IPC::System::Simple qw(capture capturex runx);
+
+my $prog = $PROGRAM_NAME;
+$prog =~ s{^.*/}{};
+
+if (@ARGV == 0 or $ARGV[0] eq '-h' or $ARGV[0] eq '--help') {
+    say {*STDERR} "Usage: $prog DIR [DIR...]";
+    exit 1;
+}
+
+my $branch = 'snapshots';
+my $ref = "refs/heads/$branch";
+if (capturex(qw(git for-each-ref), $ref)) {
+    say {*STDERR} "$prog: $ref already exists"
+        or die $ERRNO;
+    exit 1;
+}
+my $tmpdir = File::Temp->newdir(TEMPLATE => 'git-import-dirs.XXXXXXXX', TMPDIR => 1, CLEANUP => 0);
+my $commit = capture('git commit-tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904 < /dev/null');
+chomp $commit;
+runx('git', 'worktree', 'add', '--detach', $tmpdir, $commit);
+my $tmpbranch = File::Basename::basename($tmpdir);
+runx('git', '-C', $tmpdir, 'checkout', '--orphan', $tmpbranch);
+for my $dir (@ARGV) {
+    use warnings FATAL => 'File::Find';
+    my $max_mtime = '-Inf';
+    my $wanted = sub {
+        my @st = lstat or die $ERRNO;
+        my $mtime = $st[9];
+        if ($mtime > $max_mtime) {
+            $max_mtime = $mtime;
+        }
+    };
+    File::Find::find($wanted, $dir);
+    $max_mtime = localtime $max_mtime;
+    my $adir = Cwd::abs_path($dir);
+    runx('git', '-C', $tmpdir, "--work-tree=$adir", 'add', '-A');
+    runx('git', '-C', $tmpdir, "--work-tree=$adir", 'commit', '-a', '-m', 'automatic update', '--date', $max_mtime->datetime, '--allow-empty');
+}
+runx('git', '-C', $tmpdir, 'reset', '--hard');
+runx('git', '-C', $tmpdir, 'rebase', $tmpbranch, '--root', '--no-keep-empty');
+runx('git', 'worktree', 'remove', '-f', $tmpdir);
+runx('git', 'branch', '-m', $tmpbranch, $branch);
+
+# vim:ts=4 sts=4 sw=4 et
