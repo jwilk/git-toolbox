@@ -43,6 +43,7 @@ do
     name="$url"
     name="${name%/}"
     name="${name%.git}"
+    name="${name%/}"
     name="${name##*/}"
     if [ -n "$xdest" ]
     then
