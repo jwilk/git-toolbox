@@ -11,10 +11,16 @@ nothing to commit, working tree clean"
 boring2="\
 On branch null
 nothing to commit, working tree clean"
+boring3="\
+On branch null
+
+No commits yet
+
+nothing to commit (create/copy files and use \"git add\" to track)"
 out="$(git status "$@")"
 rc=$?
 case $out in
-    "$boring1"|"$boring2")
+    "$boring1"|"$boring2"|"$boring3")
         ;;
     *)
         printf '%s\n' "$out"
