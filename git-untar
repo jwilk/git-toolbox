@@ -10,6 +10,7 @@ usage()
     then
         printf '%s' '
 Options:
+  -n      don'"'"'t create a checkout
   -u      remove source file after unpacking
   -o DIR  unpack to DIR
   -h      show this help message and exit
@@ -21,10 +22,12 @@ set -e -u -C
 prog="${0##*/}"
 xdest=
 unlink=
-while getopts 'huo:' opt
+checkout=y
+while getopts 'hnuo:' opt
 do
     case "$opt" in
         h) usage long; exit 0;;
+        n) checkout=;;
         u) unlink=y;;
         o) xdest="$OPTARG";;
         *) exit 1;;
@@ -95,7 +98,12 @@ do
     fi
     mv "$dest/.git.tmp" "$dest/.git"
     printf '%s:\n' "$dest"
-    git -C "$dest/" reset --hard
+    if [ -n "$checkout" ]
+    then
+        git -C "$dest/" reset --hard
+    else
+        git -C "$dest" log -1 --pretty='HEAD is now at %h %s'
+    fi
     if [ "$unlink" = y ]
     then
         rm -- "$tarfile"
