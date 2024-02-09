@@ -3,6 +3,9 @@
 # Copyright © 2022 Jakub Wilk <jwilk@jwilk.net>
 # SPDX-License-Identifier: MIT
 
+##>> switch to an empty branch named "null"
+##>> ("git switch --orphan null" is often a viable alternative)
+
 set -e -u
 date='1970-01-01T00:00:00 +0000'
 name='nobody'
