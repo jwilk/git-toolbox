@@ -41,7 +41,7 @@ retag()
 {
     g="$(git log -1 --format=%ci "$1")"
     export GIT_COMMITTER_DATE="$g"
-    git tag -m "$project $1" -f -s -a "$1" "$1^{}"
+    git tag -m "$project $1" -f -s "$1" "$1^{}"
 }
 for t
 do
