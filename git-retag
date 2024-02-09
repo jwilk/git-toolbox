@@ -3,6 +3,8 @@
 # Copyright © 2016-2018 Jakub Wilk <jwilk@jwilk.net>
 # SPDX-License-Identifier: MIT
 
+##>> re-create tags as OpenPGP-signed
+
 usage()
 {
     printf 'Usage:\n  %s [-p PROJECT] TAG [TAG...]\n  %s [-p PROJECT] -a\n' "$prog" "$prog"
