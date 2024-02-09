@@ -7,8 +7,7 @@
 ##>> into proper tags
 
 set -e -u
-template='git tag %(refname:lstrip=4) %(objectname) && git branch -rd %(refname:strip=2)'
-v=$(git for-each-ref 'refs/remotes/origin/tags/' --shell --format "$template")
-eval "$v"
+git push . 'refs/remotes/origin/tags/*:refs/tags/*'
+git update-ref -d 'refs/remotes/origin/tags/*'
 
 # vim:ts=4 sts=4 sw=4 et
