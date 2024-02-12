@@ -6,6 +6,7 @@
 =pod
 
 Import hg-git's git-mapfile
+(which maps git commmits to hg revisions)
 as git notes.
 
 =cut
