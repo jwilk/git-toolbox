@@ -33,7 +33,7 @@ then
 fi
 template=$(git -C / config --get forall.template) || template='==> %s <=='
 # shellcheck disable=SC2086
-find $findopts . $findexpr -xdev -type d \( -name '.git' \) -print -prune \
+find $findopts . $findexpr -xdev -name '.git' -print -prune \
 | sh -c "$filter" \
 | while read -r dir
 do
