@@ -18,6 +18,7 @@ echo 1..3
 tmpdir=$(mktemp -d -t git-toolbox.XXXXXX)
 "$base/git-mktar" -o "$tmpdir/git-toolbox.git.tar" "$url"
 echo ok 1
+tar -tvvf "$tmpdir/git-toolbox.git.tar" | sed -e 's/^/# /'
 "$base/git-untar" -o "$tmpdir/git-toolbox" "$tmpdir/git-toolbox.git.tar"
 echo ok 2
 git -C "$tmpdir/git-toolbox" fsck
