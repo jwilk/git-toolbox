@@ -83,7 +83,6 @@ do
     mkdir "$dest/.git.tmp"
     tar -xf "$tarfile" --strip=1 -C "$dest/.git.tmp" --wildcards \
         '*/HEAD' \
-        '*/branches/' \
         '*/logs/' \
         '*/objects/' \
         '*/packed-refs' \
